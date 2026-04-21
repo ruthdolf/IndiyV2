@@ -1,0 +1,185 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user information and roles.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The unique user ID from Firebase Auth." },
+        "email": { "type": "string", "format": "email", "description": "User's email address." },
+        "displayName": { "type": "string", "description": "User's display name." },
+        "role": { "type": "string", "enum": ["buyer", "seller", "admin", "operations"], "description": "User's role in the marketplace." },
+        "photoURL": { "type": "string", "description": "URL to user's profile picture." },
+        "bio": { "type": "string", "description": "User's biography or description." },
+        "verified": { "type": "boolean", "description": "Whether the seller is verified by administrators." },
+        "slug": { "type": "string", "description": "URL-friendly name for the seller profile." },
+        "createdAt": { "type": "number", "description": "Timestamp when the profile was created." },
+        "favorites": { "type": "array", "items": { "type": "string" }, "description": "List of favorite service IDs." },
+        "firstName": { "type": "string", "description": "User's first name." },
+        "lastName": { "type": "string", "description": "User's last name." },
+        "isRealNamePublic": { "type": "boolean", "description": "Whether the real name is public." },
+        "username": { "type": "string", "description": "Unique username for the user." },
+        "country": { "type": "string", "description": "User's country." },
+        "city": { "type": "string", "description": "User's city." },
+        "musicJobs": { "type": "array", "items": { "type": "string" }, "description": "List of music industry jobs." },
+        "profileComplete": { "type": "boolean", "description": "Whether the user has completed their profile setup." }
+      },
+      "required": ["uid", "email", "displayName", "role", "createdAt"]
+    },
+    "ServiceListing": {
+      "title": "Service Listing",
+      "description": "Represents a service offered by a seller.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique ID for the listing." },
+        "sellerId": { "type": "string", "description": "UID of the seller who created the listing." },
+        "sellerName": { "type": "string", "description": "Display name of the seller." },
+        "sellerVerified": { "type": "boolean", "description": "Whether the seller is verified." },
+        "title": { "type": "string", "description": "Title of the service." },
+        "description": { "type": "string", "description": "Detailed description of the service." },
+        "price": { "type": "number", "description": "Price of the service." },
+        "category": { "type": "string", "description": "Category of the service." },
+        "images": { "type": "array", "items": { "type": "string" }, "description": "List of image URLs." },
+        "createdAt": { "type": "number", "description": "Timestamp when the listing was created." },
+        "status": { "type": "string", "enum": ["active", "paused", "deleted"], "description": "Current status of the listing." }
+      },
+      "required": ["id", "sellerId", "title", "description", "price", "category", "createdAt", "status"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Represents a transaction between a buyer and a seller.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique ID for the order." },
+        "buyerId": { "type": "string", "description": "UID of the buyer." },
+        "sellerId": { "type": "string", "description": "UID of the seller." },
+        "serviceId": { "type": "string", "description": "ID of the service purchased." },
+        "amount": { "type": "number", "description": "Total amount paid." },
+        "status": { "type": "string", "enum": ["pending", "active", "completed", "disputed", "cancelled"], "description": "Current status of the order." },
+        "createdAt": { "type": "number", "description": "Timestamp when the order was placed." }
+      },
+      "required": ["id", "buyerId", "sellerId", "serviceId", "amount", "status", "createdAt"]
+    },
+    "SupportTicket": {
+      "title": "Support Ticket",
+      "description": "Represents a support request or dispute.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique ID for the ticket." },
+        "userId": { "type": "string", "description": "UID of the user who created the ticket." },
+        "subject": { "type": "string", "description": "Subject of the ticket." },
+        "description": { "type": "string", "description": "Detailed description of the issue." },
+        "status": { "type": "string", "enum": ["open", "in-progress", "resolved", "closed"], "description": "Current status of the ticket." },
+        "priority": { "type": "string", "enum": ["low", "medium", "high"], "description": "Priority level." },
+        "category": { "type": "string", "enum": ["dispute", "billing", "technical", "spam", "other"], "description": "Category of the ticket." },
+        "createdAt": { "type": "number", "description": "Timestamp when the ticket was created." }
+      },
+      "required": ["id", "userId", "subject", "description", "status", "priority", "category", "createdAt"]
+    },
+    "SellerPublicProfile": {
+      "title": "Seller Public Profile",
+      "description": "Publicly visible information for sellers.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The unique user ID." },
+        "displayName": { "type": "string", "description": "User's display name." },
+        "photoURL": { "type": "string", "description": "URL to user's profile picture." },
+        "bio": { "type": "string", "description": "User's biography." },
+        "verified": { "type": "boolean", "description": "Verification status." },
+        "slug": { "type": "string", "description": "URL-friendly name." },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "languages": { "type": "array", "items": { "type": "string" } },
+        "joinedAt": { "type": "number", "description": "Timestamp when they joined." }
+      },
+      "required": ["uid", "displayName", "slug", "joinedAt"]
+    },
+    "SellerApplication": {
+      "title": "Seller Application",
+      "description": "An application from a user to become a verified seller.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique application ID." },
+        "userId": { "type": "string", "description": "UID of the applicant." },
+        "displayName": { "type": "string", "description": "Applicant's display name." },
+        "bio": { "type": "string", "description": "Proposed professional bio." },
+        "portfolioUrl": { "type": "string", "description": "Link to portfolio or past work." },
+        "skills": { "type": "array", "items": { "type": "string" }, "description": "List of skills." },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected", "needs-info"], "description": "Current status of the application." },
+        "adminFeedback": { "type": "string", "description": "Feedback from the review team." },
+        "createdAt": { "type": "number", "description": "Timestamp when submitted." },
+        "updatedAt": { "type": "number", "description": "Timestamp of last update." }
+      },
+      "required": ["id", "userId", "displayName", "bio", "status", "createdAt"]
+    },
+    "SiteSettings": {
+      "title": "Site Settings",
+      "description": "Global settings for the marketplace.",
+      "type": "object",
+      "properties": {
+        "logoUrl": { "type": "string", "description": "URL to the site logo." },
+        "siteName": { "type": "string", "description": "Name of the marketplace." },
+        "updatedAt": { "type": "number", "description": "Last update timestamp." }
+      },
+      "required": ["updatedAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "A metadata document for a chat between two or more users.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "participants": { "type": "array", "items": { "type": "string" }, "description": "Array of user UIDs." },
+        "participantDetails": { "type": "object", "description": "Mapping of UID to details like name and avatar." },
+        "lastMessage": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" },
+            "senderId": { "type": "string" },
+            "createdAt": { "type": "number" }
+          }
+        },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["id", "participants", "updatedAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "An individual message within a conversation.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "senderId": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["id", "senderId", "text", "createdAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A review for a service listing.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "serviceId": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "buyerName": { "type": "string" },
+        "rating": { "type": "number", "minimum": 1, "maximum": 5 },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["id", "serviceId", "buyerId", "rating", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": { "schema": "UserProfile", "description": "User profiles." },
+    "/seller_profiles/{uid}": { "schema": "SellerPublicProfile", "description": "Public seller profiles." },
+    "/seller_applications/{applicationId}": { "schema": "SellerApplication", "description": "Seller applications for review." },
+    "/services/{serviceId}": { "schema": "ServiceListing", "description": "Service listings." },
+    "/services/{serviceId}/reviews/{reviewId}": { "schema": "Review", "description": "Reviews for a service." },
+    "/orders/{orderId}": { "schema": "Order", "description": "Orders." },
+    "/tickets/{ticketId}": { "schema": "SupportTicket", "description": "Support tickets." },
+    "/settings/{settingId}": { "schema": "SiteSettings", "description": "Global site settings." },
+    "/conversations/{conversationId}": { "schema": "Conversation", "description": "Chat conversations." },
+    "/conversations/{conversationId}/messages/{messageId}": { "schema": "Message", "description": "Messages within a conversation." }
+  }
+}

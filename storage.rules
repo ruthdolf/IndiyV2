@@ -1,0 +1,40 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // AUTH HELPERS
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      // Admins are identified by verified email or specific UIDs
+      return isSignedIn() && (
+        request.auth.token.email in ["theindiemarketplace@gmail.com", "chris@indiy.com"]
+      );
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    // SERVICE MEDIA (Images/Videos)
+    // Publicly readable for marketplace browsing
+    match /services/{userId}/{folder}/{allPaths=**} {
+      allow read: if folder in ['images', 'videos'] || isOwner(userId);
+      allow write: if isOwner(userId);
+    }
+
+    // USER AVATARS
+    match /avatars/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isOwner(userId);
+    }
+
+    // GLOBAL SAFETY DENY
+    match /{allPaths=**} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+  }
+}
