@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, getDoc, getDocs, setDoc, collection, query, where, onSnapshot, getDocFromServer, addDoc, updateDoc, deleteDoc, arrayUnion, arrayRemove, orderBy, serverTimestamp, limit, writeBatch } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL, uploadBytesResumable, uploadString } from 'firebase/storage';
+import { listAll, getStorage, ref, uploadBytes, getDownloadURL, uploadBytesResumable, uploadString } from 'firebase/storage';
 
 // Import the Firebase configuration
 import firebaseConfig from '../firebase-applet-config.json';
@@ -66,25 +66,28 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
   throw new Error(JSON.stringify(errInfo));
 }
 
-// Validate Connection to Firestore
 async function testConnection() {
-  try {
-    await getDocFromServer(doc(db, 'test', 'connection'));
-    console.log("Firestore connection verified.");
+  try { 
+    // Test Connection to Firestore (storing structured data)
+    // Check whether the app can access the 'services' collection
+    const servicesRef = collection(db, 'services');
+    const snapshot = await getDocs(query(servicesRef, limit(1))); 
+    //without 'await', the next line will be executed before the data is fetched, causing an error. '
+    
+    console.log(`Firestore connection verified. Database is ${snapshot.empty ? 'empty' : 'not empty'}.`);
   } catch (error) {
-    if(error instanceof Error && error.message.includes('the client is offline')) {
-      console.error("Please check your Firebase configuration. ");
-    }
+    console.error("Firestore Connection Test Failed:", error);
   }
 
-  // Test Storage Connection
   try {
-    const testRef = ref(storage, 'test-connection.txt');
-    // Just try to get metadata as a simple read test
-    await getDownloadURL(testRef).catch(() => {});
-    console.log("Storage domain handshake triggered.");
-  } catch (e) {
-    console.warn("Storage probe failure (may be expected if file missing):", e);
+    // Test Connection to Firebase Storage (storing images, audio, etc.)
+    const storageRoot = ref(storage, '/');
+    const result = await listAll(storageRoot);
+    
+    // If the code reaches this line, the connection is successful
+    console.log(`Firebase Storage connection verified. Bucket is ${result.items.length === 0 ? 'empty' : 'not empty'}.`);
+  } catch (error) {
+    console.error("Test for Firebase Storage Connection Failed, make sure 'allow read: if true' is temporarily set in your Firebase Storage security rules:", error);
   }
 }
 testConnection();
