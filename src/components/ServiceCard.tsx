@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { SellerAvatar } from './SellerAvatar';
 
 interface ServiceCardProps { 
-/*interface ...Props (properties) defines what data a component ('ServiceCard') needs
-so it can be passed to another component ('Marketplace')*/
+/*interface ...Props (properties) defines what data the other component ('Marketplace') (from the array of services) needs
+so it can be passed to this 'ServiceCard' component. If the data is missing a title or id, TypeScript will throw an error immediately*/
   id: string;
   sellerId: string;
   title: string;
@@ -42,15 +42,26 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   isFree,
   downloadUrl,
 }) => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const isFavorited = user?.favorites?.includes(id);
+  const { user } = useAuth(); 
+  //a custom hook from AuthContext that provides access to the current user's authentication state and profile information.
+  //We need the user info to determine if the service is in their favorites and to allow them to add/remove it from favorites when they click the heart icon.
+  
+  const navigate = useNavigate(); 
+  //React Router hook that allows you to programmatically navigate to different routes
+  //eg. when you click on the service card, it takes you to the service details page for that specific service ID
+  
+  const isFavorited = user?.favorites?.includes(id); 
+  //looks into the user's favorites array (a list of service IDs) and checks if the current card's id is in that list.
+  //returns boolean (true/false) which is used to determine the heart icon's appearance and whether to add or remove the service ID from favorites when clicked.
+  
   const image = images?.[0] || `https://picsum.photos/seed/${id}/400/300`;
+  //fetches the first image from the service's images array to display on the card. 
+  //If none, generate a random placeholder image using the service ID as a seed (ensures the same placeholder for the same service).
 
   const toggleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) {
-      navigate('/login');
+      navigate('/login'); // If user is not logged in, redirect to login page when they try to favorite a service
       return;
     }
 

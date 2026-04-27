@@ -19,6 +19,8 @@ import {
 import { UserProfile, UserRole } from '../types';
 
 interface AuthContextType {
+  //type is props + functions (usually)
+  //The AuthContextType interface defines the shape of the authentication context that will be provided to the rest of the app.
   user: UserProfile | null;
   loading: boolean;
   signIn: () => Promise<void>;

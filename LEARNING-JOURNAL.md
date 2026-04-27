@@ -54,3 +54,11 @@ In Marketplace.tsx
 -How does the code in useEffect() show services of all categories?
 -How does the code in useEffect() show services when there's a search query?
 -What is the difference between filtering for category and filtering for searchQuery? (logic, location and why)
+
+**26 April**
+ServiceCard.tsx
+
+What I've learned:
+-Why does ServiceCard need UserProfile info from AuthContext?
+-The difference between type (interface AuthContextType in AuthContext.tsx) and props (interface ServiceCardProps in ServiceCard.tsx). (And again what does interface essentially mean?)
+
