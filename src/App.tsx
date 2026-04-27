@@ -203,11 +203,11 @@ const ProtectedRoute = ({ children, requireProfile = true }: { children: React.R
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <AuthProvider>
-        <Router>
-          <Layout>
-            <Routes>
+    <ErrorBoundary> {/*If any code below it breaks, this catches the error so the whole browser doesn't crash*/}
+      <AuthProvider> 
+        <Router> {/*listens to the browser URL (eg /marketplace) and renders the appropriate component */}
+          <Layout> {/*contains Navbar and Footer which are always visible, but the content in between changes based on the route*/}
+            <Routes> {/*switch statement eg. if URL is /marketplace, render the Marketplace component*/}
               <Route path="/" element={<LandingPage />} />
               <Route path="/marketplace" element={<Marketplace />} />
               <Route path="/service/:id" element={<ServiceDetails />} />

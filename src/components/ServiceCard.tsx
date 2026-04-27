@@ -7,7 +7,9 @@ import { db, doc, updateDoc, arrayUnion, arrayRemove, handleFirestoreError, Oper
 import { useNavigate } from 'react-router-dom';
 import { SellerAvatar } from './SellerAvatar';
 
-interface ServiceCardProps {
+interface ServiceCardProps { 
+/*interface ...Props (properties) defines what data a component ('ServiceCard') needs
+so it can be passed to another component ('Marketplace')*/
   id: string;
   sellerId: string;
   title: string;
@@ -24,6 +26,8 @@ interface ServiceCardProps {
 }
 
 export const ServiceCard: React.FC<ServiceCardProps> = ({
+//ServiceCardProps is a Type Argument ("Generic")
+//By having it, the component "ServiceCard" expects props that match the ServiceCardProps interface defined above
   id,
   sellerId,
   title,
