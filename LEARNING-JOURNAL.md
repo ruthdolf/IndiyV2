@@ -61,4 +61,12 @@ ServiceCard.tsx
 What I've learned:
 -Why does ServiceCard need UserProfile info from AuthContext?
 -The difference between type (interface AuthContextType in AuthContext.tsx) and props (interface ServiceCardProps in ServiceCard.tsx). (And again what does interface essentially mean?)
+-What is the purpose of destructuring ie { something } = useAuth() ? (in ServiceCard and App)
+-React.FC ("typescript type") in ServiceCard VS () => { ("arrow function") in App.tsx
+    These are two ways to tell the computer "This is a React component."
 
+    Arrow Function is standard JavaScript. It says "This is a function." Since React components are just functions that return JSX, this works perfectly.
+
+    TypeScript Type: FC = Functional Component. When you write const Login: React.FC = () => { ... }, you are giving the function a "Job Title." It tells TypeScript: "This function is specifically a React component, so it should expect things like children and return JSX."
+
+    In modern coding, many developers just use the simple arrow function because it's less "wordy," but React.FC is helpful when you are passing Props because it lets you define the "Rules" (Interface) right in the name.

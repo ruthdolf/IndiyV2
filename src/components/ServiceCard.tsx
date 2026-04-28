@@ -45,6 +45,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   const { user } = useAuth(); 
   //a custom hook from AuthContext that provides access to the current user's authentication state and profile information.
   //We need the user info to determine if the service is in their favorites and to allow them to add/remove it from favorites when they click the heart icon.
+  //{...} is 'destructuring' - it pulls out only what you need, the 'user' property, from the object returned by useAuth(), rather all props
   
   const navigate = useNavigate(); 
   //React Router hook that allows you to programmatically navigate to different routes

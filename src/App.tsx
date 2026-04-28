@@ -17,15 +17,19 @@ import { Loader2 } from 'lucide-react';
 // Marketplace is now in its own component file
 
 const Login = () => {
+  //() => { 'arrow function' which defines a function
   const { signIn, signInWithEmail, user, loading, isSigningIn } = useAuth();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = React.useState(false); //to prevent multiple clicks on the sign in button while the sign in process is ongoing
+  const navigate = useNavigate(); //React Router hook that allows you to programmatically navigate to different routes, eg. after successful login, navigate to the dashboard
   
   if (loading) return <div className="p-24 text-center">Loading...</div>;
+  //
+
   if (user) return <Navigate to="/dashboard" replace />;
+  //If user is already logged in, redirect to dashboard. This prevents logged in users from seeing the login page.
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
